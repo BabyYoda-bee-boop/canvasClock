@@ -1,19 +1,19 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const radius = canvas.width / 2 * 0.9;
+const radius = canvas.width / 2*0.9;
 
 const paw = new Image();
-paw.src = "img/paw.svg";
+paw.src = "./img/paw.svg";
 
 paw.onload = () => {
   drawClock();
-  setInterval(drawClock, 1);
+  setInterval(drawClock, 1000);
 };
 
 function drawClock() {
   ctx.save();
   //ctx.setTransform(1,0,0,1,0,0);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0, canvas.width, canvas.height);
   ctx.restore();
 
   ctx.save();
@@ -27,15 +27,15 @@ function drawClock() {
   ctx.save();
   ctx.beginPath();
   ctx.font = "italic 20px Pacifico";
-  ctx.strokeText("VR-dev", 20, canvas.height - 30);
+  ctx.strokeText("VR-dev", 20, canvas.height-30);
   const textWidth = ctx.measureText("VR-dev").width;
   const pawX = 20 + textWidth + 3;
   const pawY = canvas.height - 50;
   const imgW = 20;
-  const aspectRatio = paw.height / paw.width;
-  const imgH = imgW * aspectRatio;
-  ctx.translate(pawX + 3, pawY);
-  ctx.rotate(Math.PI / 180 * 20)
+  const aspectRatio = paw.height/paw.width;
+  const imgH = imgW*aspectRatio;
+  ctx.translate(pawX+3, pawY);
+  ctx.rotate(Math.PI/180 *20)
   ctx.drawImage(paw, 0, 0, imgW, imgH);
   ctx.restore();
 };
@@ -44,26 +44,26 @@ function drawFace() {
   //Background:
   ctx.save();
   ctx.beginPath();
-  ctx.arc(0, 0, radius, 0, Math.PI * 2);
+  ctx.arc(0,0, radius, 0, Math.PI*2);
   ctx.fillStyle = "rgba(199, 240, 255, 0.7)";
   ctx.fill();
   //Center of clock-hands:
   ctx.fillStyle = "#484838";
   ctx.beginPath();
-  ctx.arc(0, 0, radius * 0.06, Math.PI * 2, 0);
+  ctx.arc(0,0, radius*0.06, Math.PI*2, 0);
   ctx.fill();
   ctx.beginPath();
   ctx.fillStyle = ""
   //Fancy border :p
-  let gradient = ctx.createRadialGradient(0, 0, radius * 0.95, 0, 0, radius * 1.05);
+  let gradient = ctx.createRadialGradient(0,0, radius*0.95, 0, 0, radius*1.05);
   gradient.addColorStop(0, "#2f4858");
   gradient.addColorStop(0.5, "#79b99d");
   gradient.addColorStop(1, "#396d78");
 
   ctx.beginPath();
-  ctx.arc(0, 0, radius, 0, Math.PI * 2);
+  ctx.arc(0,0, radius, 0, Math.PI*2);
   ctx.strokeStyle = gradient;
-  ctx.lineWidth = radius * 0.1;
+  ctx.lineWidth = radius*0.1;
   ctx.stroke();
   ctx.restore();
 }
@@ -73,8 +73,8 @@ function drawNumbers() {
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
   ctx.font = radius * 0.15 + "px Arial";
-  for (let i = 1; i < 13; i++) {
-    let arc = (2 * Math.PI / 12) * i;
+  for(let i = 1; i < 13; i++) {
+    let arc = (2*Math.PI/12)*i;
     ctx.rotate(arc);
     ctx.translate(0, -rad);
     ctx.rotate(-arc);
@@ -85,16 +85,16 @@ function drawNumbers() {
   }
   //Draw additional minute lines:
   ctx.save();
-  for (let i = 0; i < 60; i++) {
-    let arc = (Math.PI * 2 / 60) * i;
+  for(let i = 0; i< 60; i++) {
+    let arc = (Math.PI*2/60)*i;
     ctx.rotate(arc);
     ctx.beginPath();
-    ctx.moveTo(0, -rad * 0.95);
-    ctx.lineTo(0, -rad * 1);
+    ctx.moveTo(0, -rad*0.95);
+    ctx.lineTo(0, -rad *1);
     ctx.lineWidth = 1;
     ctx.strokeStyle = "grey";
     ctx.rotate(-arc);
-    if (i % 5) {
+    if(i % 5) {
       ctx.stroke();
     } else continue;
   }
@@ -111,21 +111,20 @@ function drawHands() {
   let hours = currentTime.getHours();
   let minutes = currentTime.getMinutes();
   let seconds = currentTime.getSeconds();
-  let milliSeconds = currentTime.getMilliseconds();
-  //console.log(`ure: ${hours}, minute: ${minutes}, seconds: ${seconds}`);
+  console.log(`ure: ${hours}, minute: ${minutes}, seconds: ${seconds}`);
 
   ctx.save();
   ctx.strokeStyle = "#354b46";
-  let arcH = (Math.PI * 2 / 12) * (hours % 12) + (Math.PI * 2 / 12 * (minutes / 60) + (Math.PI * 2 / (12 * 60) * (seconds / 60)) + (Math.PI * 2 / (12 * 3600 * 1000) * milliSeconds));
-  let arcM = (Math.PI * 2 / 60) * minutes + (Math.PI * 2 / 60) * (seconds / 60) + (Math.PI * 2 / (60 * 60 * 1000) * milliSeconds);
-  let arcS = (Math.PI * 2 / 60) * seconds + (Math.PI * 2 / (60 * 1000) * milliSeconds);
-  //console.log(`acrH: ${arcH}, acrM: ${arcM}, acrS: ${arcS}, milisekunde: ${milliSeconds}`);
+  let arcH = (Math.PI*2/12)*(hours % 12) + (Math.PI*2/12*(minutes/60));
+  let arcM = (Math.PI*2/60)*minutes;
+  let arcS = (Math.PI*2/60)*seconds;
+  console.log(`acrH: ${arcH}, acrM: ${arcM}, acrS: ${arcS}`);
   // HOURS:
   ctx.lineWidth = 10;
   ctx.rotate(arcH);
   ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(0, -radius * 0.6);
+  ctx.moveTo(0,0);
+  ctx.lineTo(0, -radius*0.6);
   ctx.lineCap = "round";
   ctx.rotate(-arcH);
   ctx.stroke();
@@ -133,8 +132,8 @@ function drawHands() {
   ctx.lineWidth = 6;
   ctx.rotate(arcM);
   ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(0, -radius * 0.8);
+  ctx.moveTo(0,0);
+  ctx.lineTo(0, -radius*0.8);
   ctx.lineCap = "round";
   ctx.rotate(-arcM);
   ctx.stroke();
@@ -142,9 +141,10 @@ function drawHands() {
   ctx.lineWidth = 2;
   ctx.rotate(arcS);
   ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(0, -radius * 0.85);
+  ctx.moveTo(0,0);
+  ctx.lineTo(0, -radius*0.85);
   ctx.lineCap = "round";
   ctx.stroke();
   ctx.restore();
 }
+
